@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app-frontend-stg:
+    container_name: app-frontend-stg
+    image: nginx:latest
+    volumes:
+      - ./nginx-templates:/etc/nginx/templates
+      - ../../mkkang-frontend/build/:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_HOST=app-backend-stg
+      - NGINX_PORT=8080
+    networks:
+      - stg-network
+    depends_on:
+      - app-backend-stg
+
+  app-backend-stg:
+    container_name: app-backend-stg
+    image: openjdk:17
+    volumes:
+      - ../../mkkang-backend/build/libs/:/usr/share
+      - ../../mkkang-backend/build/resources/main/:/usr/share/resources
+    ports:
+      - "8080:8080"
+    env_file: .env
+    working_dir: /usr/share
+    command: ["java", "-jar", "mkkang-backend-0.0.1-SNAPSHOT.jar"]
+    networks:
+      - stg-network
+
+networks:
+  stg-network:
+    name: stg-network
+    external: true
+
+# cp ../mkkang-backend/.env.stage ./stage/.env
+# docker-compose -f stage/docker-compose-app.yml build
+# docker-compose -f stage/docker-compose-app.yml up --build -d
+

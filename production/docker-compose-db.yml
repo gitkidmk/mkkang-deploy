@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  redis-stg:
+    container_name: redis-stg
+    platform: linux/amd64
+    image: redis:latest
+    hostname: redis-stg
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data
+    environment:
+      - REDIS_PASSWORD=1234
+    ports:
+      - "16379:6379"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    networks:
+      - stg-network
+
+  mariadb-stg:
+    container_name: mariadb-stg
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=rootdb
+      - MYSQL_USER=mkkang
+      - MYSQL_PASSWORD=1234
+    ports:
+      - "13306:3306"
+    networks:
+      - stg-network
+
+networks:
+  stg-network:
+    name: stg-network
+    driver: bridge
+
+# docker-compose -f stage/docker-compose-db.yml build
+# docker-compose -f stage/docker-compose-db.yml up --build -d
