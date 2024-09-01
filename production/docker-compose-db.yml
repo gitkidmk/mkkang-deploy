@@ -1,11 +1,10 @@
 version: '3.8'
 
 services:
-  redis-stg:
-    container_name: redis-stg
-    platform: linux/amd64
-    image: redis:latest
-    hostname: redis-stg
+  redis-prd:
+    container_name: redis-prd
+    image: arm64v8/redis
+    hostname: redis-prd
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./redis/data:/data
@@ -17,8 +16,8 @@ services:
     networks:
       - stg-network
 
-  mariadb-stg:
-    container_name: mariadb-stg
+  mariadb-prd:
+    container_name: mariadb-prd
     image: mariadb:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root

@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  app-frontend-stg:
-    container_name: app-frontend-stg
+  app-frontend-prd:
+    container_name: app-frontend-prd
     image: nginx:latest
     volumes:
       - ./nginx-templates:/etc/nginx/templates
@@ -10,15 +10,15 @@ services:
     ports:
       - "80:80"
     environment:
-      - NGINX_HOST=app-backend-stg
+      - NGINX_HOST=app-backend-prd
       - NGINX_PORT=8080
     networks:
       - stg-network
     depends_on:
-      - app-backend-stg
+      - app-backend-prd
 
-  app-backend-stg:
-    container_name: app-backend-stg
+  app-backend-prd:
+    container_name: app-backend-prd
     image: openjdk:17
     volumes:
       - ../../mkkang-backend/build/libs/:/usr/share
