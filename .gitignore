@@ -3,3 +3,4 @@ docker-and-deploy.iml
 stage/redis/data
 stage/.env
 production/.env
+production/nginx/ssl
